@@ -1,18 +1,20 @@
 import streamlit as st
 
+from rag_utils import *
+
 # session states
 ## chat history with initial message
 if "chat_history" not in st.session_state:
-    st.session_state.chat_history = [{"user": "bot", "text": "Hello, how can I help you?"}]
+    st.session_state.chat_history = [{"role": "bot", "content": "Hello, how can I help you?"}]
     
 ## Store current query (i.e., last user input)
 if "current_query" not in st.session_state:
     st.session_state.current_query = ""
-
+    
 def run_chatui():
     st.set_page_config(page_title="🤗💬 RAG Bot")
     
-    # Display chat history
+    # Display 
     for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -31,7 +33,8 @@ def run_chatui():
             with st.spinner("Thinking..."):
                 # We'll have it repeat us for now, like a baby bot. 
                 # Here is where the LLM response would go. 
-                answer = st.session_state.current_query
+                answer, context_docs = run_rag_chain(chat_messages = st.session_state.chat_history,
+                                        user_query = st.session_state.current_query)
                 st.write("🤖: " + answer)
             
         message = {"role": "bot", "content": answer}
