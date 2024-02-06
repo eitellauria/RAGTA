@@ -62,7 +62,7 @@ def build_chat_history(message_history):
 ########
 
 def load_docs():
-    loader = PyPDFDirectoryLoader("LLM_Education/")
+    loader = PyPDFDirectoryLoader("pdfs_repo/")
     knowledge_base = loader.load()
     return knowledge_base
 
